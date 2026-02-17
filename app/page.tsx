@@ -16,19 +16,13 @@ import {
   FiChevronRight,
   FiClock,
   FiFileText,
-  FiTrendingUp,
   FiTarget,
   FiAlertCircle,
-  FiCheckCircle,
   FiInfo,
-  FiMenu,
-  FiX,
   FiActivity,
   FiEye,
-  FiEyeOff,
   FiSliders,
   FiZap,
-  FiFilter,
   FiList,
   FiBarChart2,
   FiBookOpen,
@@ -38,7 +32,8 @@ import {
   FiStar,
   FiArrowRight,
   FiCheck,
-  FiLoader
+  FiLoader,
+  FiChevronLeft
 } from 'react-icons/fi'
 
 // --------------- CONSTANTS ---------------
@@ -211,19 +206,19 @@ function renderMarkdown(text: string) {
           )
         if (line.startsWith('- ') || line.startsWith('* '))
           return (
-            <li key={i} className="ml-4 list-disc text-sm" style={{ lineHeight: '1.55', color: 'hsl(20,40%,10%)' }}>
+            <li key={i} className="ml-4 list-disc text-sm" style={{ lineHeight: '1.6', color: 'hsl(20,40%,10%)' }}>
               {formatInline(line.slice(2))}
             </li>
           )
         if (/^\d+\.\s/.test(line))
           return (
-            <li key={i} className="ml-4 list-decimal text-sm" style={{ lineHeight: '1.55', color: 'hsl(20,40%,10%)' }}>
+            <li key={i} className="ml-4 list-decimal text-sm" style={{ lineHeight: '1.6', color: 'hsl(20,40%,10%)' }}>
               {formatInline(line.replace(/^\d+\.\s/, ''))}
             </li>
           )
         if (!line.trim()) return <div key={i} className="h-1" />
         return (
-          <p key={i} className="text-sm" style={{ lineHeight: '1.55', color: 'hsl(20,40%,10%)' }}>
+          <p key={i} className="text-sm" style={{ lineHeight: '1.6', color: 'hsl(20,40%,10%)' }}>
             {formatInline(line)}
           </p>
         )
@@ -249,6 +244,15 @@ function getPriorityColor(priority: string): { bg: string; text: string } {
   if (p === 'high') return { bg: 'hsl(0,84%,95%)', text: 'hsl(0,84%,45%)' }
   if (p === 'medium') return { bg: 'hsl(45,93%,92%)', text: 'hsl(45,80%,35%)' }
   return { bg: 'hsl(142,76%,94%)', text: 'hsl(142,50%,30%)' }
+}
+
+function getTypeBadgeStyle(type: string) {
+  switch (type) {
+    case 'Content': return { bg: 'hsl(24,95%,94%)', color: 'hsl(24,95%,40%)' }
+    case 'SEO': return { bg: 'hsl(12,80%,94%)', color: 'hsl(12,80%,40%)' }
+    case 'Graphics': return { bg: 'hsl(262,83%,94%)', color: 'hsl(262,83%,40%)' }
+    default: return { bg: 'hsl(30,30%,90%)', color: 'hsl(20,25%,45%)' }
+  }
 }
 
 // --------------- SAMPLE DATA ---------------
@@ -306,11 +310,11 @@ const SAMPLE_SEO_RESULT: SEOResult = {
 }
 
 const SAMPLE_RECENT_OUTPUTS: RecentOutput[] = [
-  { id: '1', type: 'Content', title: 'AI Marketing Trends Blog Post', timestamp: 'Jan 15, 10:30 AM', preview: 'A comprehensive blog post covering 5 AI marketing trends...' },
-  { id: '2', type: 'SEO', title: 'SEO Analysis: Marketing Blog', timestamp: 'Jan 15, 10:45 AM', preview: 'Overall Score: 78/100 - Good keyword usage, needs more internal links...' },
-  { id: '3', type: 'Graphics', title: 'Social Media Banner', timestamp: 'Jan 15, 11:00 AM', preview: 'A vibrant social media banner with gradient background...' },
-  { id: '4', type: 'Content', title: 'Product Launch Email', timestamp: 'Jan 14, 3:20 PM', preview: 'Engaging email campaign for the Q1 product launch...' },
-  { id: '5', type: 'Graphics', title: 'Ad Creative - Spring Sale', timestamp: 'Jan 14, 2:10 PM', preview: 'Eye-catching ad creative featuring spring colors...' },
+  { id: '1', type: 'Content', title: 'AI Marketing Trends Blog Post', timestamp: 'Jan 15, 10:30 AM', preview: 'A comprehensive blog post covering 5 AI marketing trends that are reshaping the industry...' },
+  { id: '2', type: 'SEO', title: 'SEO Analysis: Marketing Blog', timestamp: 'Jan 15, 10:45 AM', preview: 'Overall Score: 78/100 - Good keyword usage, needs more internal links and longer content...' },
+  { id: '3', type: 'Graphics', title: 'Social Media Banner - AI Theme', timestamp: 'Jan 15, 11:00 AM', preview: 'A vibrant social media banner with gradient background featuring AI and data visuals...' },
+  { id: '4', type: 'Content', title: 'Product Launch Email Campaign', timestamp: 'Jan 14, 3:20 PM', preview: 'Engaging email campaign series for the Q1 product launch with A/B test variants...' },
+  { id: '5', type: 'Graphics', title: 'Ad Creative - Spring Sale', timestamp: 'Jan 14, 2:10 PM', preview: 'Eye-catching ad creative featuring spring colors and seasonal promotional messaging...' },
 ]
 
 // --------------- AGENT INFO ---------------
@@ -319,6 +323,21 @@ const AGENTS = [
   { id: SEO_ANALYST_AGENT_ID, name: 'SEO Analyst', desc: 'Keyword analysis, readability, meta descriptions, headings', icon: FiSearch },
   { id: VISUAL_DESIGNER_AGENT_ID, name: 'Visual Designer', desc: 'Banners, thumbnails, social posts, ad creatives', icon: FiImage },
 ]
+
+// --------------- CARD WRAPPER ---------------
+const cardStyle: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.75)',
+  backdropFilter: 'blur(16px)',
+  WebkitBackdropFilter: 'blur(16px)',
+  borderColor: 'rgba(255,255,255,0.18)',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+}
+
+const inputStyle: React.CSSProperties = {
+  background: 'hsl(30,40%,98%)',
+  borderColor: 'hsl(30,35%,88%)',
+  color: 'hsl(20,40%,10%)',
+}
 
 // --------------- SUB-COMPONENTS ---------------
 
@@ -344,25 +363,36 @@ function Sidebar({ activeScreen, onNavigate, collapsed, onToggle }: {
         borderColor: 'hsl(30,35%,88%)',
       }}
     >
+      {/* Logo Area */}
       <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'hsl(30,35%,88%)' }}>
         {!collapsed && (
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'hsl(24,95%,53%)' }}>
               <FiZap size={16} color="hsl(30,40%,98%)" />
             </div>
-            <span className="font-serif font-semibold text-sm" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.01em' }}>MCC</span>
+            <span className="font-serif font-bold text-sm" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.01em' }}>MCC</span>
           </div>
         )}
+        {collapsed && (
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center mx-auto" style={{ background: 'hsl(24,95%,53%)' }}>
+            <FiZap size={16} color="hsl(30,40%,98%)" />
+          </div>
+        )}
+      </div>
+
+      {/* Toggle Button */}
+      <div className="px-3 pt-3">
         <button
           onClick={onToggle}
-          className="p-1.5 rounded-lg transition-colors duration-200 hover:opacity-80"
+          className="w-full flex items-center justify-center p-1.5 rounded-lg transition-colors duration-200 hover:opacity-80"
           style={{ background: 'hsl(30,35%,90%)', color: 'hsl(20,40%,10%)' }}
         >
-          {collapsed ? <FiMenu size={16} /> : <FiX size={16} />}
+          {collapsed ? <FiChevronRight size={14} /> : <FiChevronLeft size={14} />}
         </button>
       </div>
 
-      <nav className="flex-1 p-3 space-y-1">
+      {/* Navigation */}
+      <nav className="flex-1 p-3 space-y-1 mt-1">
         {navItems.map((item) => {
           const isActive = activeScreen === item.key
           return (
@@ -386,6 +416,7 @@ function Sidebar({ activeScreen, onNavigate, collapsed, onToggle }: {
         })}
       </nav>
 
+      {/* Bottom Agent Status */}
       {!collapsed && (
         <div className="p-3 border-t" style={{ borderColor: 'hsl(30,35%,88%)' }}>
           <div className="p-3 rounded-xl" style={{ background: 'hsl(30,35%,90%)' }}>
@@ -393,7 +424,7 @@ function Sidebar({ activeScreen, onNavigate, collapsed, onToggle }: {
             <div className="space-y-1.5">
               {AGENTS.map((a) => (
                 <div key={a.id} className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'hsl(142,76%,46%)' }} />
+                  <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: 'hsl(142,76%,46%)' }} />
                   <span className="text-xs" style={{ color: 'hsl(20,25%,45%)' }}>{a.name}</span>
                 </div>
               ))}
@@ -443,52 +474,40 @@ function DashboardScreen({ recentOutputs, sampleMode, onNavigate, onFilterChange
     },
   ]
 
-  function getTypeBadgeStyle(type: string) {
-    switch (type) {
-      case 'Content': return { bg: 'hsl(24,95%,94%)', color: 'hsl(24,95%,40%)' }
-      case 'SEO': return { bg: 'hsl(12,80%,94%)', color: 'hsl(12,80%,40%)' }
-      case 'Graphics': return { bg: 'hsl(262,83%,94%)', color: 'hsl(262,83%,40%)' }
-      default: return { bg: 'hsl(30,30%,90%)', color: 'hsl(20,25%,45%)' }
-    }
-  }
-
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.01em' }}>
+        <h1 className="text-2xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.02em' }}>
           Marketing Command Center
         </h1>
-        <p className="text-sm" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.55' }}>
+        <p className="text-sm" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.6' }}>
           Create content, analyze SEO, and generate visuals -- all powered by AI agents working together.
         </p>
       </div>
 
+      {/* Quick Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {quickActions.map((qa) => (
           <button
             key={qa.screen}
             onClick={() => onNavigate(qa.screen)}
             className="text-left p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 group"
-            style={{
-              background: 'rgba(255,255,255,0.75)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              borderColor: 'rgba(255,255,255,0.18)',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-            }}
+            style={cardStyle}
           >
             <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: qa.bgColor }}>
               <qa.icon size={20} color={qa.color} />
             </div>
             <h3 className="font-serif font-semibold text-sm mb-1" style={{ color: 'hsl(20,40%,10%)' }}>{qa.title}</h3>
-            <p className="text-xs mb-3" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.55' }}>{qa.desc}</p>
+            <p className="text-xs mb-3" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.6' }}>{qa.desc}</p>
             <span className="inline-flex items-center gap-1 text-xs font-medium" style={{ color: qa.color }}>
-              Create New <FiArrowRight size={12} className="transition-transform duration-200 group-hover:translate-x-1" />
+              Open Studio <FiArrowRight size={12} className="transition-transform duration-200 group-hover:translate-x-1" />
             </span>
           </button>
         ))}
       </div>
 
+      {/* Recent Outputs */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-serif font-semibold text-base" style={{ color: 'hsl(20,40%,10%)' }}>Recent Outputs</h2>
@@ -514,7 +533,9 @@ function DashboardScreen({ recentOutputs, sampleMode, onNavigate, onFilterChange
           <div className="text-center py-12 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', borderColor: 'hsl(30,35%,88%)' }}>
             <FiFileText size={32} className="mx-auto mb-3 opacity-30" style={{ color: 'hsl(20,25%,45%)' }} />
             <p className="text-sm font-medium mb-1" style={{ color: 'hsl(20,40%,10%)' }}>No outputs yet</p>
-            <p className="text-xs" style={{ color: 'hsl(20,25%,45%)' }}>Start creating content, analyzing SEO, or generating graphics to see your work here.</p>
+            <p className="text-xs" style={{ color: 'hsl(20,25%,45%)' }}>
+              Start creating content, analyzing SEO, or generating graphics to see your work here.
+            </p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -523,12 +544,8 @@ function DashboardScreen({ recentOutputs, sampleMode, onNavigate, onFilterChange
               return (
                 <div
                   key={item.id}
-                  className="flex items-start gap-3 p-4 rounded-xl border transition-all duration-200 hover:shadow-md"
-                  style={{
-                    background: 'rgba(255,255,255,0.75)',
-                    backdropFilter: 'blur(16px)',
-                    borderColor: 'rgba(255,255,255,0.18)',
-                  }}
+                  className="flex items-start gap-3 p-4 rounded-xl border transition-all duration-200 hover:shadow-md cursor-default"
+                  style={cardStyle}
                 >
                   <span
                     className="px-2 py-0.5 rounded-md text-xs font-medium shrink-0 mt-0.5"
@@ -538,9 +555,9 @@ function DashboardScreen({ recentOutputs, sampleMode, onNavigate, onFilterChange
                   </span>
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-medium truncate" style={{ color: 'hsl(20,40%,10%)' }}>{item.title}</h4>
-                    <p className="text-xs truncate mt-0.5" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.55' }}>{item.preview}</p>
+                    <p className="text-xs truncate mt-0.5" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.6' }}>{item.preview}</p>
                   </div>
-                  <span className="text-xs shrink-0 flex items-center gap-1" style={{ color: 'hsl(20,25%,45%)' }}>
+                  <span className="text-xs shrink-0 flex items-center gap-1 whitespace-nowrap" style={{ color: 'hsl(20,25%,45%)' }}>
                     <FiClock size={11} />
                     {item.timestamp}
                   </span>
@@ -557,7 +574,6 @@ function DashboardScreen({ recentOutputs, sampleMode, onNavigate, onFilterChange
 function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
   sampleMode: boolean
   onAddOutput: (output: RecentOutput) => void
-  activeAgentId: string | null
   setActiveAgentId: (id: string | null) => void
 }) {
   const [topic, setTopic] = useState('')
@@ -621,20 +637,21 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.01em' }}>
+        <h1 className="text-xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.02em' }}>
           Content Studio
         </h1>
         <p className="text-sm" style={{ color: 'hsl(20,25%,45%)' }}>Generate marketing content using AI -- from blog posts to ad copy.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Input Form */}
-        <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+        {/* Configuration Form */}
+        <div className="p-5 rounded-2xl border" style={cardStyle}>
           <h2 className="font-serif font-semibold text-sm mb-4 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
             <FiSliders size={14} /> Configuration
           </h2>
 
           <div className="space-y-4">
+            {/* Topic */}
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'hsl(20,40%,10%)' }}>Topic *</label>
               <input
@@ -642,18 +659,19 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                 placeholder="e.g., The Future of AI in Marketing"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border text-sm outline-none transition-all duration-200"
-                style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
+                className="w-full px-3 py-2 rounded-xl border text-sm outline-none transition-all duration-200 focus:ring-2 focus:ring-orange-300"
+                style={inputStyle}
               />
             </div>
 
+            {/* Content Type */}
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'hsl(20,40%,10%)' }}>Content Type</label>
               <select
                 value={contentType}
                 onChange={(e) => setContentType(e.target.value as ContentTypeOption)}
                 className="w-full px-3 py-2 rounded-xl border text-sm outline-none transition-all duration-200"
-                style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
+                style={inputStyle}
               >
                 {contentTypes.map((ct) => (
                   <option key={ct} value={ct}>{ct}</option>
@@ -661,6 +679,7 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
               </select>
             </div>
 
+            {/* Target Audience */}
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'hsl(20,40%,10%)' }}>Target Audience</label>
               <input
@@ -668,11 +687,12 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                 placeholder="e.g., Marketing professionals, 25-45"
                 value={audience}
                 onChange={(e) => setAudience(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border text-sm outline-none transition-all duration-200"
-                style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
+                className="w-full px-3 py-2 rounded-xl border text-sm outline-none transition-all duration-200 focus:ring-2 focus:ring-orange-300"
+                style={inputStyle}
               />
             </div>
 
+            {/* Tone */}
             <div>
               <label className="block text-xs font-medium mb-2" style={{ color: 'hsl(20,40%,10%)' }}>Tone</label>
               <div className="flex flex-wrap gap-2">
@@ -693,6 +713,7 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
               </div>
             </div>
 
+            {/* Word Count Slider */}
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'hsl(20,40%,10%)' }}>
                 Word Count: <span style={{ color: 'hsl(24,95%,53%)' }}>{wordCount}</span>
@@ -712,6 +733,7 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
               </div>
             </div>
 
+            {/* Error */}
             {error && (
               <div className="flex items-center gap-2 p-3 rounded-xl text-xs" style={{ background: 'hsl(0,84%,97%)', color: 'hsl(0,84%,45%)' }}>
                 <FiAlertCircle size={14} />
@@ -719,10 +741,11 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
               </div>
             )}
 
+            {/* Generate Button */}
             <button
               onClick={handleGenerate}
               disabled={loading || !topic.trim()}
-              className="w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-md"
               style={{ background: 'hsl(24,95%,53%)', color: 'hsl(30,40%,98%)' }}
             >
               {loading ? (
@@ -735,7 +758,7 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
         </div>
 
         {/* Output Panel */}
-        <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+        <div className="p-5 rounded-2xl border" style={cardStyle}>
           <h2 className="font-serif font-semibold text-sm mb-4 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
             <FiFileText size={14} /> Output
           </h2>
@@ -751,37 +774,41 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
               </div>
               <div className="flex gap-2">
                 <div className="h-8 rounded-lg w-20" style={{ background: 'hsl(30,30%,90%)' }} />
-                <div className="h-8 rounded-lg w-20" style={{ background: 'hsl(30,30%,90%)' }} />
+                <div className="h-8 rounded-lg w-24" style={{ background: 'hsl(30,30%,90%)' }} />
               </div>
             </div>
           ) : displayResult ? (
             <div className="space-y-4 overflow-y-auto" style={{ maxHeight: '600px' }}>
+              {/* Title & Type Badge */}
               <div>
-                <h3 className="font-serif font-bold text-lg mb-1" style={{ color: 'hsl(20,40%,10%)' }}>
+                <h3 className="font-serif font-bold text-lg mb-1.5" style={{ color: 'hsl(20,40%,10%)' }}>
                   {displayResult?.title ?? 'Untitled'}
                 </h3>
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: 'hsl(24,95%,94%)', color: 'hsl(24,95%,40%)' }}>
                     {displayResult?.content_type ?? 'Content'}
                   </span>
-                  <span className="text-xs" style={{ color: 'hsl(20,25%,45%)' }}>
+                  <span className="text-xs flex items-center gap-1" style={{ color: 'hsl(20,25%,45%)' }}>
+                    <FiAlignLeft size={11} />
                     {displayResult?.word_count ?? 0} words
                   </span>
                 </div>
               </div>
 
+              {/* Content */}
               <div className="p-4 rounded-xl border" style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)' }}>
                 {renderMarkdown(displayResult?.content ?? '')}
               </div>
 
+              {/* Key Points */}
               {Array.isArray(displayResult?.key_points) && displayResult.key_points.length > 0 && (
                 <div>
                   <h4 className="text-xs font-medium mb-2 flex items-center gap-1" style={{ color: 'hsl(20,40%,10%)' }}>
-                    <FiStar size={12} /> Key Points
+                    <FiStar size={12} style={{ color: 'hsl(24,95%,53%)' }} /> Key Points
                   </h4>
                   <ul className="space-y-1.5">
                     {displayResult.key_points.map((kp, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.55' }}>
+                      <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.6' }}>
                         <FiCheck size={12} className="mt-0.5 shrink-0" style={{ color: 'hsl(142,76%,46%)' }} />
                         {kp}
                       </li>
@@ -790,19 +817,21 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                 </div>
               )}
 
+              {/* Meta Description */}
               {displayResult?.meta_description && (
                 <div className="p-3 rounded-xl border" style={{ background: 'hsl(30,35%,92%)', borderColor: 'hsl(30,35%,88%)' }}>
                   <h4 className="text-xs font-medium mb-1 flex items-center gap-1" style={{ color: 'hsl(20,40%,10%)' }}>
                     <FiTag size={12} /> Meta Description
                   </h4>
-                  <p className="text-xs" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.55' }}>{displayResult.meta_description}</p>
+                  <p className="text-xs" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.6' }}>{displayResult.meta_description}</p>
                 </div>
               )}
 
+              {/* Actions */}
               <div className="flex gap-2 pt-2">
                 <button
                   onClick={handleCopy}
-                  className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 hover:shadow-sm"
                   style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
                 >
                   {copied ? <><FiCheck size={12} /> Copied</> : <><FiCopy size={12} /> Copy</>}
@@ -810,7 +839,7 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                 <button
                   onClick={handleRegenerate}
                   disabled={loading || !topic.trim()}
-                  className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50 hover:shadow-sm"
                   style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
                 >
                   <FiRefreshCw size={12} /> Regenerate
@@ -833,13 +862,13 @@ function ContentStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
 function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
   sampleMode: boolean
   onAddOutput: (output: RecentOutput) => void
-  activeAgentId: string | null
   setActiveAgentId: (id: string | null) => void
 }) {
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<SEOResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [copiedMeta, setCopiedMeta] = useState(false)
 
   const displayResult = sampleMode && !result ? SAMPLE_SEO_RESULT : result
   const charCount = content.length
@@ -875,30 +904,41 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
     }
   }
 
+  const handleCopyMeta = async () => {
+    const meta = displayResult?.meta_description?.suggested_meta ?? ''
+    if (meta) {
+      const ok = await copyToClipboard(meta)
+      if (ok) {
+        setCopiedMeta(true)
+        setTimeout(() => setCopiedMeta(false), 2000)
+      }
+    }
+  }
+
   const overallScore = displayResult?.overall_score ?? 0
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.01em' }}>
+        <h1 className="text-xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.02em' }}>
           SEO Analyzer
         </h1>
         <p className="text-sm" style={{ color: 'hsl(20,25%,45%)' }}>Paste your content to get a comprehensive SEO analysis with actionable recommendations.</p>
       </div>
 
       {/* Input Section */}
-      <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+      <div className="p-5 rounded-2xl border" style={cardStyle}>
         <div className="flex items-center justify-between mb-2">
           <label className="text-xs font-medium" style={{ color: 'hsl(20,40%,10%)' }}>Content to Analyze</label>
-          <span className="text-xs" style={{ color: 'hsl(20,25%,45%)' }}>{charCount.toLocaleString()} characters</span>
+          <span className="text-xs tabular-nums" style={{ color: 'hsl(20,25%,45%)' }}>{charCount.toLocaleString()} characters</span>
         </div>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Paste your blog post, landing page, or marketing content here..."
           rows={8}
-          className="w-full px-3 py-2 rounded-xl border text-sm outline-none resize-none transition-all duration-200"
-          style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}
+          className="w-full px-3 py-2 rounded-xl border text-sm outline-none resize-none transition-all duration-200 focus:ring-2 focus:ring-orange-300"
+          style={{ ...inputStyle, lineHeight: '1.6' }}
         />
 
         {error && (
@@ -911,7 +951,7 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
         <button
           onClick={handleAnalyze}
           disabled={loading || !content.trim()}
-          className="mt-3 w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-3 w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-md"
           style={{ background: 'hsl(12,80%,50%)', color: 'hsl(30,40%,98%)' }}
         >
           {loading ? (
@@ -938,31 +978,38 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
       ) : displayResult ? (
         <div className="space-y-4">
           {/* Overall Score */}
-          <div className="p-5 rounded-2xl border flex items-center gap-4" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+          <div className="p-5 rounded-2xl border flex items-center gap-4" style={cardStyle}>
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center font-serif font-bold text-2xl shrink-0"
               style={{ background: getScoreBgColor(overallScore), color: getScoreColor(overallScore) }}
             >
               {overallScore}
             </div>
-            <div>
+            <div className="flex-1">
               <h3 className="font-serif font-semibold text-sm" style={{ color: 'hsl(20,40%,10%)' }}>Overall SEO Score</h3>
-              <p className="text-xs" style={{ color: 'hsl(20,25%,45%)' }}>
-                {overallScore >= 70 ? 'Good - Your content is well-optimized' : overallScore >= 40 ? 'Needs Improvement - Follow the recommendations below' : 'Poor - Significant optimization needed'}
+              <p className="text-xs mt-0.5" style={{ color: 'hsl(20,25%,45%)' }}>
+                {overallScore >= 70 ? 'Good - Your content is well-optimized for search engines' : overallScore >= 40 ? 'Needs Improvement - Follow the recommendations below to boost your score' : 'Poor - Significant optimization is needed to improve search visibility'}
               </p>
+            </div>
+            <div
+              className="px-3 py-1 rounded-xl text-xs font-medium shrink-0"
+              style={{ background: getScoreBgColor(overallScore), color: getScoreColor(overallScore) }}
+            >
+              {overallScore >= 70 ? 'Good' : overallScore >= 40 ? 'Fair' : 'Poor'}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Keyword Analysis */}
-            <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+            <div className="p-5 rounded-2xl border" style={cardStyle}>
               <h3 className="font-serif font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
-                <FiTarget size={14} /> Keyword Analysis
+                <FiTarget size={14} style={{ color: 'hsl(24,95%,53%)' }} /> Keyword Analysis
               </h3>
               <div className="space-y-3">
+                {/* Primary Keywords */}
                 <div>
-                  <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Primary Keywords</p>
-                  <div className="flex flex-wrap gap-1">
+                  <p className="text-xs font-medium mb-1.5" style={{ color: 'hsl(20,25%,45%)' }}>Primary Keywords</p>
+                  <div className="flex flex-wrap gap-1.5">
                     {Array.isArray(displayResult?.keyword_analysis?.primary_keywords) && displayResult.keyword_analysis.primary_keywords.map((kw, i) => (
                       <span key={i} className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: 'hsl(24,95%,94%)', color: 'hsl(24,95%,40%)' }}>
                         {kw}
@@ -970,9 +1017,10 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                     ))}
                   </div>
                 </div>
+                {/* Secondary Keywords */}
                 <div>
-                  <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Secondary Keywords</p>
-                  <div className="flex flex-wrap gap-1">
+                  <p className="text-xs font-medium mb-1.5" style={{ color: 'hsl(20,25%,45%)' }}>Secondary Keywords</p>
+                  <div className="flex flex-wrap gap-1.5">
                     {Array.isArray(displayResult?.keyword_analysis?.secondary_keywords) && displayResult.keyword_analysis.secondary_keywords.map((kw, i) => (
                       <span key={i} className="px-2 py-0.5 rounded-md text-xs" style={{ background: 'hsl(30,35%,92%)', color: 'hsl(20,40%,15%)' }}>
                         {kw}
@@ -980,14 +1028,18 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                     ))}
                   </div>
                 </div>
+                {/* Keyword Density */}
                 <div>
                   <p className="text-xs font-medium mb-0.5" style={{ color: 'hsl(20,25%,45%)' }}>Keyword Density</p>
-                  <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>{displayResult?.keyword_analysis?.keyword_density ?? 'N/A'}</p>
+                  <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
+                    {displayResult?.keyword_analysis?.keyword_density ?? 'N/A'}
+                  </p>
                 </div>
+                {/* Missing Keywords */}
                 {Array.isArray(displayResult?.keyword_analysis?.missing_keywords) && (displayResult.keyword_analysis.missing_keywords.length > 0) && (
                   <div>
-                    <p className="text-xs font-medium mb-1" style={{ color: 'hsl(0,84%,45%)' }}>Missing Keywords</p>
-                    <div className="flex flex-wrap gap-1">
+                    <p className="text-xs font-medium mb-1.5" style={{ color: 'hsl(0,84%,45%)' }}>Missing Keywords</p>
+                    <div className="flex flex-wrap gap-1.5">
                       {displayResult.keyword_analysis.missing_keywords.map((kw, i) => (
                         <span key={i} className="px-2 py-0.5 rounded-md text-xs" style={{ background: 'hsl(0,84%,97%)', color: 'hsl(0,84%,45%)' }}>
                           {kw}
@@ -1000,14 +1052,14 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
             </div>
 
             {/* Readability */}
-            <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+            <div className="p-5 rounded-2xl border" style={cardStyle}>
               <h3 className="font-serif font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
-                <FiBookOpen size={14} /> Readability
+                <FiBookOpen size={14} style={{ color: 'hsl(24,95%,53%)' }} /> Readability
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center font-serif font-bold text-lg"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center font-serif font-bold text-lg shrink-0"
                     style={{ background: getScoreBgColor(displayResult?.readability?.score ?? 0), color: getScoreColor(displayResult?.readability?.score ?? 0) }}
                   >
                     {displayResult?.readability?.score ?? 0}
@@ -1019,10 +1071,10 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                 </div>
                 {Array.isArray(displayResult?.readability?.suggestions) && displayResult.readability.suggestions.length > 0 && (
                   <div>
-                    <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Suggestions</p>
-                    <ul className="space-y-1">
+                    <p className="text-xs font-medium mb-1.5" style={{ color: 'hsl(20,25%,45%)' }}>Suggestions</p>
+                    <ul className="space-y-1.5">
                       {displayResult.readability.suggestions.map((s, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>
+                        <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
                           <FiInfo size={11} className="mt-0.5 shrink-0" style={{ color: 'hsl(24,95%,53%)' }} />
                           {s}
                         </li>
@@ -1034,40 +1086,55 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
             </div>
 
             {/* Meta Description */}
-            <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+            <div className="p-5 rounded-2xl border" style={cardStyle}>
               <h3 className="font-serif font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
-                <FiTag size={14} /> Meta Description
+                <FiTag size={14} style={{ color: 'hsl(24,95%,53%)' }} /> Meta Description
               </h3>
               <div className="space-y-3">
                 <div>
                   <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Current Evaluation</p>
-                  <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>{displayResult?.meta_description?.current_evaluation ?? 'N/A'}</p>
+                  <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
+                    {displayResult?.meta_description?.current_evaluation ?? 'N/A'}
+                  </p>
                 </div>
                 {displayResult?.meta_description?.suggested_meta && (
                   <div className="p-3 rounded-xl border" style={{ background: 'hsl(142,76%,96%)', borderColor: 'hsl(142,50%,85%)' }}>
-                    <p className="text-xs font-medium mb-1" style={{ color: 'hsl(142,50%,30%)' }}>Suggested Meta</p>
-                    <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>{displayResult.meta_description.suggested_meta}</p>
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-xs font-medium" style={{ color: 'hsl(142,50%,30%)' }}>Suggested Meta</p>
+                      <button
+                        onClick={handleCopyMeta}
+                        className="text-xs flex items-center gap-1 transition-colors hover:opacity-70"
+                        style={{ color: 'hsl(142,50%,30%)' }}
+                      >
+                        {copiedMeta ? <><FiCheck size={10} /> Copied</> : <><FiCopy size={10} /> Copy</>}
+                      </button>
+                    </div>
+                    <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
+                      {displayResult.meta_description.suggested_meta}
+                    </p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Heading Structure */}
-            <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+            <div className="p-5 rounded-2xl border" style={cardStyle}>
               <h3 className="font-serif font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
-                <FiType size={14} /> Heading Structure
+                <FiType size={14} style={{ color: 'hsl(24,95%,53%)' }} /> Heading Structure
               </h3>
               <div className="space-y-3">
                 <div>
                   <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Evaluation</p>
-                  <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>{displayResult?.heading_structure?.evaluation ?? 'N/A'}</p>
+                  <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
+                    {displayResult?.heading_structure?.evaluation ?? 'N/A'}
+                  </p>
                 </div>
                 {Array.isArray(displayResult?.heading_structure?.suggestions) && displayResult.heading_structure.suggestions.length > 0 && (
                   <div>
-                    <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Suggestions</p>
-                    <ul className="space-y-1">
+                    <p className="text-xs font-medium mb-1.5" style={{ color: 'hsl(20,25%,45%)' }}>Suggestions</p>
+                    <ul className="space-y-1.5">
                       {displayResult.heading_structure.suggestions.map((s, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>
+                        <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
                           <FiAlignLeft size={11} className="mt-0.5 shrink-0" style={{ color: 'hsl(24,95%,53%)' }} />
                           {s}
                         </li>
@@ -1081,9 +1148,9 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
 
           {/* Recommendations */}
           {Array.isArray(displayResult?.recommendations) && displayResult.recommendations.length > 0 && (
-            <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+            <div className="p-5 rounded-2xl border" style={cardStyle}>
               <h3 className="font-serif font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
-                <FiList size={14} /> Recommendations ({displayResult.recommendations.length})
+                <FiList size={14} style={{ color: 'hsl(24,95%,53%)' }} /> Recommendations ({displayResult.recommendations.length})
               </h3>
               <div className="space-y-2">
                 {displayResult.recommendations.map((rec, i) => {
@@ -1091,7 +1158,7 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                   return (
                     <div
                       key={i}
-                      className="flex items-start gap-3 p-3 rounded-xl border transition-all duration-200"
+                      className="flex items-start gap-3 p-3 rounded-xl border transition-all duration-200 hover:shadow-sm"
                       style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)' }}
                     >
                       <span className="px-2 py-0.5 rounded-md text-xs font-medium shrink-0 mt-0.5" style={{ background: pc.bg, color: pc.text }}>
@@ -1099,7 +1166,7 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                       </span>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium" style={{ color: 'hsl(20,40%,10%)' }}>{rec?.category ?? ''}</p>
-                        <p className="text-xs mt-0.5" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.55' }}>{rec?.suggestion ?? ''}</p>
+                        <p className="text-xs mt-0.5" style={{ color: 'hsl(20,25%,45%)', lineHeight: '1.6' }}>{rec?.suggestion ?? ''}</p>
                       </div>
                     </div>
                   )
@@ -1122,7 +1189,6 @@ function SEOAnalyzerScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
 function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
   sampleMode: boolean
   onAddOutput: (output: RecentOutput) => void
-  activeAgentId: string | null
   setActiveAgentId: (id: string | null) => void
 }) {
   const [description, setDescription] = useState('')
@@ -1141,7 +1207,7 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
     setError(null)
     setActiveAgentId(VISUAL_DESIGNER_AGENT_ID)
 
-    const message = `Create a ${format} graphic with the following description: ${description.trim()}. ${styleNotes.trim() ? `Style notes: ${styleNotes.trim()}.` : ''} Format type: ${format}.`
+    const message = `Create a ${format} graphic with the following description: ${description.trim()}. ${styleNotes.trim() ? `Style notes: ${styleNotes.trim()}.` : ''} Format type: ${format}. Please provide image_description, format_type, style_applied, and design_notes.`
 
     try {
       const res = await callAIAgent(message, VISUAL_DESIGNER_AGENT_ID)
@@ -1157,9 +1223,9 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
         onAddOutput({
           id: generateId(),
           type: 'Graphics',
-          title: parsed?.image_description?.substring(0, 60) ?? `${format} Graphic`,
+          title: (parsed?.image_description ?? '').substring(0, 60) || `${format} Graphic`,
           timestamp: formatTimestamp(),
-          preview: parsed?.design_notes?.substring(0, 120) ?? `Generated ${format} with custom style`,
+          preview: (parsed?.design_notes ?? '').substring(0, 120) || `Generated ${format} with custom style`,
         })
       } else {
         setError(res?.error ?? 'Failed to generate graphic. Please try again.')
@@ -1179,20 +1245,21 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.01em' }}>
+        <h1 className="text-xl font-serif font-bold mb-1" style={{ color: 'hsl(20,40%,10%)', letterSpacing: '-0.02em' }}>
           Graphics Studio
         </h1>
         <p className="text-sm" style={{ color: 'hsl(20,25%,45%)' }}>Generate marketing visuals with AI -- from banners to ad creatives.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Input Form */}
-        <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+        {/* Configuration */}
+        <div className="p-5 rounded-2xl border" style={cardStyle}>
           <h2 className="font-serif font-semibold text-sm mb-4 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
             <FiSliders size={14} /> Configuration
           </h2>
 
           <div className="space-y-4">
+            {/* Description */}
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'hsl(20,40%,10%)' }}>Description *</label>
               <textarea
@@ -1200,11 +1267,12 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe the visual you want to create, e.g., A modern tech banner with gradient background showing AI and marketing concepts..."
                 rows={4}
-                className="w-full px-3 py-2 rounded-xl border text-sm outline-none resize-none transition-all duration-200"
-                style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}
+                className="w-full px-3 py-2 rounded-xl border text-sm outline-none resize-none transition-all duration-200 focus:ring-2 focus:ring-orange-300"
+                style={{ ...inputStyle, lineHeight: '1.6' }}
               />
             </div>
 
+            {/* Format */}
             <div>
               <label className="block text-xs font-medium mb-2" style={{ color: 'hsl(20,40%,10%)' }}>Format</label>
               <div className="flex flex-wrap gap-2">
@@ -1225,6 +1293,7 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
               </div>
             </div>
 
+            {/* Style Notes */}
             <div>
               <label className="block text-xs font-medium mb-1.5" style={{ color: 'hsl(20,40%,10%)' }}>Style Notes (optional)</label>
               <input
@@ -1232,11 +1301,12 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                 placeholder="e.g., Minimalist, warm colors, corporate style"
                 value={styleNotes}
                 onChange={(e) => setStyleNotes(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border text-sm outline-none transition-all duration-200"
-                style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
+                className="w-full px-3 py-2 rounded-xl border text-sm outline-none transition-all duration-200 focus:ring-2 focus:ring-orange-300"
+                style={inputStyle}
               />
             </div>
 
+            {/* Error */}
             {error && (
               <div className="flex items-center gap-2 p-3 rounded-xl text-xs" style={{ background: 'hsl(0,84%,97%)', color: 'hsl(0,84%,45%)' }}>
                 <FiAlertCircle size={14} />
@@ -1244,10 +1314,11 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
               </div>
             )}
 
+            {/* Generate */}
             <button
               onClick={handleGenerate}
               disabled={loading || !description.trim()}
-              className="w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-md"
               style={{ background: 'hsl(24,95%,53%)', color: 'hsl(30,40%,98%)' }}
             >
               {loading ? (
@@ -1259,8 +1330,8 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
           </div>
         </div>
 
-        {/* Gallery / Output */}
-        <div className="p-5 rounded-2xl border" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(16px)', borderColor: 'rgba(255,255,255,0.18)' }}>
+        {/* Preview Gallery */}
+        <div className="p-5 rounded-2xl border" style={cardStyle}>
           <h2 className="font-serif font-semibold text-sm mb-4 flex items-center gap-2" style={{ color: 'hsl(20,40%,10%)' }}>
             <FiEye size={14} /> Preview Gallery
           </h2>
@@ -1279,7 +1350,7 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
             </div>
           ) : images.length > 0 || designResult ? (
             <div className="space-y-4 overflow-y-auto" style={{ maxHeight: '600px' }}>
-              {/* Image Display */}
+              {/* Generated Images */}
               {images.length > 0 && (
                 <div className="space-y-3">
                   {images.map((img, i) => (
@@ -1289,7 +1360,7 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                           src={img?.file_url ?? ''}
                           alt={img?.name ?? `Generated graphic ${i + 1}`}
                           className="w-full h-auto object-contain"
-                          style={{ maxHeight: '400px' }}
+                          style={{ maxHeight: '400px', background: 'hsl(30,40%,96%)' }}
                         />
                       </div>
                       <div className="flex gap-2">
@@ -1298,7 +1369,7 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                           download={img?.name ?? 'graphic'}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 no-underline"
+                          className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 no-underline hover:shadow-sm"
                           style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
                         >
                           <FiDownload size={12} /> Download
@@ -1306,7 +1377,7 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                         <button
                           onClick={handleRegenerate}
                           disabled={loading || !description.trim()}
-                          className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50 hover:shadow-sm"
                           style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
                         >
                           <FiRefreshCw size={12} /> Regenerate
@@ -1323,7 +1394,9 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                   {designResult?.image_description && (
                     <div>
                       <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Image Description</p>
-                      <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>{designResult.image_description}</p>
+                      <p className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
+                        {designResult.image_description}
+                      </p>
                     </div>
                   )}
                   <div className="flex flex-wrap gap-2">
@@ -1341,19 +1414,21 @@ function GraphicsStudioScreen({ sampleMode, onAddOutput, setActiveAgentId }: {
                   {designResult?.design_notes && (
                     <div className="p-3 rounded-xl border" style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)' }}>
                       <p className="text-xs font-medium mb-1" style={{ color: 'hsl(20,25%,45%)' }}>Design Notes</p>
-                      <div className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.55' }}>{renderMarkdown(designResult.design_notes)}</div>
+                      <div className="text-xs" style={{ color: 'hsl(20,40%,10%)', lineHeight: '1.6' }}>
+                        {renderMarkdown(designResult.design_notes)}
+                      </div>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* No images but design result */}
+              {/* Regenerate when no images but has design data */}
               {images.length === 0 && designResult && (
                 <div className="flex gap-2 pt-2">
                   <button
                     onClick={handleRegenerate}
                     disabled={loading || !description.trim()}
-                    className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50 hover:shadow-sm"
                     style={{ background: 'hsl(30,40%,98%)', borderColor: 'hsl(30,35%,88%)', color: 'hsl(20,40%,10%)' }}
                   >
                     <FiRefreshCw size={12} /> Regenerate
@@ -1412,7 +1487,7 @@ export default function Page() {
         background: 'linear-gradient(135deg, hsl(30,50%,97%) 0%, hsl(20,45%,95%) 35%, hsl(40,40%,96%) 70%, hsl(15,35%,97%) 100%)',
         color: 'hsl(20,40%,10%)',
         letterSpacing: '-0.01em',
-        lineHeight: '1.55',
+        lineHeight: '1.6',
       } as React.CSSProperties}
     >
       {/* Sidebar */}
@@ -1423,7 +1498,7 @@ export default function Page() {
         onToggle={() => setSidebarCollapsed((p) => !p)}
       />
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
         <header
@@ -1435,17 +1510,23 @@ export default function Page() {
             borderColor: 'hsl(30,35%,88%)',
           }}
         >
+          {/* Left: Active Agent Indicator */}
           <div className="flex items-center gap-3">
-            {activeAgentId && activeAgentInfo && (
+            {activeAgentId && activeAgentInfo ? (
               <div className="flex items-center gap-2 px-3 py-1 rounded-xl" style={{ background: 'hsl(24,95%,96%)' }}>
                 <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'hsl(24,95%,53%)' }} />
                 <span className="text-xs font-medium" style={{ color: 'hsl(24,95%,40%)' }}>
                   {activeAgentInfo.name} working...
                 </span>
               </div>
+            ) : (
+              <span className="text-xs" style={{ color: 'hsl(20,25%,45%)' }}>
+                {activeScreen === 'dashboard' ? 'Dashboard' : activeScreen === 'content' ? 'Content Studio' : activeScreen === 'seo' ? 'SEO Analyzer' : 'Graphics Studio'}
+              </span>
             )}
           </div>
 
+          {/* Right: Controls */}
           <div className="flex items-center gap-3">
             {/* Agent Activity Toggle */}
             <button
@@ -1471,6 +1552,7 @@ export default function Page() {
                 onClick={() => setSampleMode((p) => !p)}
                 className="relative w-9 h-5 rounded-full transition-all duration-200"
                 style={{ background: sampleMode ? 'hsl(24,95%,53%)' : 'hsl(30,30%,80%)' }}
+                aria-label="Toggle sample data"
               >
                 <div
                   className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all duration-200"
@@ -1481,8 +1563,9 @@ export default function Page() {
           </div>
         </header>
 
-        {/* Content Area */}
+        {/* Content + Activity Panel */}
         <div className="flex-1 flex overflow-hidden">
+          {/* Main Content */}
           <main className="flex-1 overflow-y-auto p-6">
             {activeScreen === 'dashboard' && (
               <DashboardScreen
@@ -1497,7 +1580,6 @@ export default function Page() {
               <ContentStudioScreen
                 sampleMode={sampleMode}
                 onAddOutput={handleAddOutput}
-                activeAgentId={activeAgentId}
                 setActiveAgentId={setActiveAgentId}
               />
             )}
@@ -1505,7 +1587,6 @@ export default function Page() {
               <SEOAnalyzerScreen
                 sampleMode={sampleMode}
                 onAddOutput={handleAddOutput}
-                activeAgentId={activeAgentId}
                 setActiveAgentId={setActiveAgentId}
               />
             )}
@@ -1513,7 +1594,6 @@ export default function Page() {
               <GraphicsStudioScreen
                 sampleMode={sampleMode}
                 onAddOutput={handleAddOutput}
-                activeAgentId={activeAgentId}
                 setActiveAgentId={setActiveAgentId}
               />
             )}

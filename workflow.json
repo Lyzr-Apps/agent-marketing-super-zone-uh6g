@@ -1,0 +1,79 @@
+{
+  "workflow": {
+    "name": "Marketing Command Center",
+    "description": "Multi-agent marketing system with content writing, SEO analysis, and visual design capabilities",
+    "nodes": [
+      {
+        "id": "input_node",
+        "type": "Input",
+        "label": "User Input",
+        "nodeCategory": "input"
+      },
+      {
+        "id": "content_writer_agent",
+        "type": "Agent",
+        "label": "Content Writer Agent",
+        "nodeCategory": "agent",
+        "agent_id": "6993c1eaa32ee924407711bb",
+        "agent_name": "Content Writer Agent",
+        "provider": "openai",
+        "model": "gpt-4.1",
+        "temperature": 0.75,
+        "top_p": 0.95,
+        "agent_type": "text",
+        "has_image_output": false,
+        "has_voice": false,
+        "has_file_output": false
+      },
+      {
+        "id": "seo_analyst_agent",
+        "type": "Agent",
+        "label": "SEO Analyst Agent",
+        "nodeCategory": "agent",
+        "agent_id": "6993c1ea377a30c497e53776",
+        "agent_name": "SEO Analyst Agent",
+        "provider": "perplexity",
+        "model": "sonar-pro",
+        "temperature": 0.3,
+        "top_p": 1,
+        "agent_type": "text",
+        "has_image_output": false,
+        "has_voice": false,
+        "has_file_output": false
+      },
+      {
+        "id": "visual_designer_agent",
+        "type": "Agent",
+        "label": "Visual Designer Agent",
+        "nodeCategory": "agent",
+        "agent_id": "6993c1eaf9e30d409c8625a0",
+        "agent_name": "Visual Designer Agent",
+        "provider": "openai",
+        "model": "gpt-4.1",
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "agent_type": "image",
+        "has_image_output": true,
+        "image_output_config": {
+          "model": "gemini/gemini-3-pro-image-preview"
+        },
+        "has_voice": false,
+        "has_file_output": false
+      },
+      {
+        "id": "output_node",
+        "type": "Output",
+        "label": "Marketing Output",
+        "nodeCategory": "end"
+      }
+    ],
+    "edges": [
+      { "source": "input_node", "target": "content_writer_agent" },
+      { "source": "input_node", "target": "seo_analyst_agent" },
+      { "source": "input_node", "target": "visual_designer_agent" },
+      { "source": "content_writer_agent", "target": "output_node" },
+      { "source": "seo_analyst_agent", "target": "output_node" },
+      { "source": "visual_designer_agent", "target": "output_node" }
+    ]
+  }
+}

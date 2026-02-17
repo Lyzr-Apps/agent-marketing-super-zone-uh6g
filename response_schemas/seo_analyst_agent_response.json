@@ -1,0 +1,90 @@
+{
+  "agent_name": "SEO Analyst Agent",
+  "agent_id": "6993c1ea377a30c497e53776",
+  "description": "Performs real-time SEO analysis on provided content \u2014 evaluates keyword usage, density, readability, meta descriptions, heading structure, internal linking suggestions, and competitive keyword opportunities",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "result": {
+      "overall_score": "number",
+      "keyword_analysis": {
+        "primary_keywords": [
+          "string"
+        ],
+        "secondary_keywords": [
+          "string"
+        ],
+        "keyword_density": "string",
+        "missing_keywords": [
+          "string"
+        ]
+      },
+      "readability": {
+        "score": "number",
+        "grade_level": "string",
+        "suggestions": [
+          "string"
+        ]
+      },
+      "meta_description": {
+        "current_evaluation": "string",
+        "suggested_meta": "string"
+      },
+      "heading_structure": {
+        "evaluation": "string",
+        "suggestions": [
+          "string"
+        ]
+      },
+      "recommendations": [
+        {
+          "priority": "string",
+          "category": "string",
+          "suggestion": "string"
+        }
+      ]
+    }
+  },
+  "example_response": {
+    "result": {
+      "overall_score": 0,
+      "keyword_analysis": {
+        "primary_keywords": [
+          "sample string"
+        ],
+        "secondary_keywords": [
+          "sample string"
+        ],
+        "keyword_density": "sample string",
+        "missing_keywords": [
+          "sample string"
+        ]
+      },
+      "readability": {
+        "score": 0,
+        "grade_level": "sample string",
+        "suggestions": [
+          "sample string"
+        ]
+      },
+      "meta_description": {
+        "current_evaluation": "sample string",
+        "suggested_meta": "sample string"
+      },
+      "heading_structure": {
+        "evaluation": "sample string",
+        "suggestions": [
+          "sample string"
+        ]
+      },
+      "recommendations": [
+        {
+          "priority": "sample string",
+          "category": "sample string",
+          "suggestion": "sample string"
+        }
+      ]
+    }
+  }
+}

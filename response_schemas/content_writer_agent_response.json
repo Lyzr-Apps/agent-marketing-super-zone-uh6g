@@ -1,0 +1,32 @@
+{
+  "agent_name": "Content Writer Agent",
+  "agent_id": "6993c1eaa32ee924407711bb",
+  "description": "Generates marketing copy including blog posts, social media captions, landing page text, email campaigns, and ad copy based on user-provided topic, tone, audience, and content type",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "result": {
+      "title": "string",
+      "content_type": "string",
+      "content": "string",
+      "word_count": "number",
+      "key_points": [
+        "string"
+      ],
+      "meta_description": "string"
+    }
+  },
+  "example_response": {
+    "result": {
+      "title": "sample string",
+      "content_type": "sample string",
+      "content": "sample string",
+      "word_count": 0,
+      "key_points": [
+        "sample string"
+      ],
+      "meta_description": "sample string"
+    }
+  }
+}

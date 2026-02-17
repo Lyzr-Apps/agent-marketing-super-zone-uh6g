@@ -1,0 +1,32 @@
+{
+  "agent_name": "Visual Designer Agent",
+  "agent_id": "6993c1eaf9e30d409c8625a0",
+  "description": "Generates marketing graphics including social media banners, blog thumbnails, ad creatives, and branded visuals based on user descriptions and style preferences",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "result": {
+      "image_description": "string",
+      "format_type": "string",
+      "style_applied": "string",
+      "design_notes": "string"
+    }
+  },
+  "example_response": {
+    "result": {
+      "image_description": "sample string",
+      "format_type": "sample string",
+      "style_applied": "sample string",
+      "design_notes": "sample string"
+    }
+  },
+  "has_module_outputs": true,
+  "module_outputs_example": {
+    "artifact_files": [
+      {
+        "file_url": "https://example.com/image.png"
+      }
+    ]
+  }
+}
